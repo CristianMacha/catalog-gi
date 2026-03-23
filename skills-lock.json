@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "nextjs": {
+      "source": "vercel-labs/vercel-plugin",
+      "sourceType": "github",
+      "computedHash": "c50aa77f7aa7196a0b1e6a436d064319b20316fbad8d9f18769b470bfae0340b"
+    }
+  }
+}
