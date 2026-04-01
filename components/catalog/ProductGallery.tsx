@@ -1,20 +1,20 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Image from 'next/image'
-import type { CatalogProductImage } from '@/lib/types/catalog'
-import { cloudinaryUrl } from '@/lib/cloudinary'
+import { useState } from "react";
+import Image from "next/image";
+import type { CatalogProductImage } from "@/lib/types/catalog";
+import { cloudinaryUrl } from "@/lib/cloudinary";
 
 interface ProductGalleryProps {
-  images: CatalogProductImage[]
-  productName: string
+  images: CatalogProductImage[];
+  productName: string;
 }
 
 export function ProductGallery({ images, productName }: ProductGalleryProps) {
-  const sorted = [...images].sort((a, b) => a.sortOrder - b.sortOrder)
-  const [active, setActive] = useState(0)
+  const sorted = [...images].sort((a, b) => a.sortOrder - b.sortOrder);
+  const [active, setActive] = useState(0);
 
-  if (sorted.length === 0) return null
+  if (sorted.length === 0) return null;
 
   return (
     <div className="flex flex-col gap-3">
@@ -26,6 +26,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
           fill
           className="object-cover"
           priority
+          loading="eager"
         />
       </div>
 
@@ -37,7 +38,9 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
               key={img.publicId}
               onClick={() => setActive(i)}
               className={`relative shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-colors ${
-                i === active ? 'border-white' : 'border-transparent opacity-50 hover:opacity-75'
+                i === active
+                  ? "border-white"
+                  : "border-transparent opacity-50 hover:opacity-75"
               }`}
             >
               <Image
@@ -45,11 +48,12 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 alt={`${productName} thumbnail ${i + 1}`}
                 fill
                 className="object-cover"
+                loading="eager"
               />
             </button>
           ))}
         </div>
       )}
     </div>
-  )
+  );
 }

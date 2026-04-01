@@ -1,17 +1,17 @@
 'use server'
 
 import type {
-  CatalogProduct,
   CatalogProductDetail,
   CatalogFilters,
   CatalogProductsParams,
+  PaginatedProducts,
 } from '@/lib/types/catalog'
 
 const API_BASE = process.env.API_URL ?? 'http://localhost:3001'
 
 export async function getCatalogProducts(
   params: CatalogProductsParams = {}
-): Promise<CatalogProduct[]> {
+): Promise<PaginatedProducts> {
   const query = new URLSearchParams()
 
   if (params.page) query.set('page', String(params.page))
@@ -31,8 +31,19 @@ export async function getCatalogProducts(
   }
 
   const json = await res.json()
-  // Handle both array and paginated object responses { data: [], total, ... }
-  return Array.isArray(json) ? json : (json.data ?? json.items ?? [])
+
+  // Normalize: API may return array or paginated object
+  if (Array.isArray(json)) {
+    return { data: json, total: json.length, page: 1, limit: json.length, totalPages: 1 }
+  }
+
+  return {
+    data: json.data ?? json.items ?? [],
+    total: json.total ?? 0,
+    page: json.page ?? 1,
+    limit: json.limit ?? params.limit ?? 20,
+    totalPages: json.totalPages ?? 1,
+  }
 }
 
 export async function getCatalogProductDetail(

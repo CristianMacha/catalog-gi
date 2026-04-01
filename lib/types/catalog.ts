@@ -58,3 +58,11 @@ export interface CatalogProductsParams {
   brandId?: string
   search?: string
 }
+
+export interface PaginatedProducts {
+  data: CatalogProduct[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+}

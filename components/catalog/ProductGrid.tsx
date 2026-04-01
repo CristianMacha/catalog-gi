@@ -11,14 +11,16 @@ export function ProductGrid({ products }: ProductGridProps) {
   if (products.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-32 text-center">
-        <p className="text-neutral-400 dark:text-neutral-600 text-sm font-mono">No products found</p>
-        <p className="text-neutral-300 dark:text-neutral-700 text-xs mt-1">Try adjusting your filters</p>
+        <p className="text-sm text-neutral-400 dark:text-neutral-600">No products found</p>
+        <p className="text-xs text-neutral-300 dark:text-neutral-700 mt-1">
+          Try adjusting your filters
+        </p>
       </div>
     )
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
@@ -28,52 +30,47 @@ export function ProductGrid({ products }: ProductGridProps) {
 
 function ProductCard({ product }: { product: CatalogProduct }) {
   return (
-    <Link
-      href={`/catalog/${product.slug}`}
-      className="group flex flex-col gap-4"
-    >
-      <div className="aspect-square bg-neutral-100 dark:bg-neutral-900 rounded-sm overflow-hidden">
+    <Link href={`/catalog/${product.slug}`} className="group flex flex-col gap-3">
+      {/* Image */}
+      <div className="aspect-4/5 bg-[#e8ddd4] dark:bg-neutral-800 rounded overflow-hidden">
         {product.primaryImagePublicId ? (
           <Image
-            src={cloudinaryUrl(product.primaryImagePublicId, { width: 400 })}
+            src={cloudinaryUrl(product.primaryImagePublicId, { width: 600 })}
             alt={product.name}
-            width={400}
-            height={400}
+            width={600}
+            height={750}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <span className="text-neutral-400 dark:text-neutral-700 text-xs font-mono">{product.category.name}</span>
+            <span className="text-xs text-neutral-400 dark:text-neutral-600 font-mono">
+              {product.category.name}
+            </span>
           </div>
         )}
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <p className="text-xs font-mono text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
+      {/* Info */}
+      <div className="flex flex-col gap-0.5">
+        <p className="text-[11px] font-semibold tracking-widest uppercase text-neutral-400 dark:text-neutral-500">
           {product.category.name}
         </p>
-        <h3 className="text-sm font-medium group-hover:text-neutral-600 dark:group-hover:text-white transition-colors leading-snug">
+        <h3 className="text-sm font-medium text-neutral-900 dark:text-neutral-100 group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors">
           {product.name}
         </h3>
-        {product.description && (
-          <p className="text-xs text-neutral-400 dark:text-neutral-600 line-clamp-2 leading-relaxed">
-            {product.description}
-          </p>
-        )}
-      </div>
-
-      <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
-        <Badge>{product.level.name}</Badge>
-        <Badge>{product.finish.name}</Badge>
-        {product.brand && <Badge>{product.brand.name}</Badge>}
+        <div className="flex flex-wrap gap-1 mt-1">
+          <Tag>{product.level.name}</Tag>
+          <Tag>{product.finish.name}</Tag>
+          {product.brand && <Tag>{product.brand.name}</Tag>}
+        </div>
       </div>
     </Link>
   )
 }
 
-function Badge({ children }: { children: React.ReactNode }) {
+function Tag({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-block bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-xs font-mono px-2 py-0.5 rounded-sm">
+    <span className="text-[11px] text-neutral-400 dark:text-neutral-500 font-mono">
       {children}
     </span>
   )
