@@ -12,7 +12,27 @@ export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params
   try {
     const product = await getCatalogProductDetail(slug)
-    return { title: product.name, description: product.description }
+
+    const ogImage = product.primaryImagePublicId
+      ? `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/w_1200,h_630,c_fill,q_auto,f_auto/${product.primaryImagePublicId}`
+      : undefined
+
+    return {
+      title: product.name,
+      description: product.description,
+      openGraph: {
+        title: product.name,
+        description: product.description,
+        type: 'website',
+        ...(ogImage && { images: [{ url: ogImage, width: 1200, height: 630, alt: product.name }] }),
+      },
+      twitter: {
+        card: ogImage ? 'summary_large_image' : 'summary',
+        title: product.name,
+        description: product.description,
+        ...(ogImage && { images: [ogImage] }),
+      },
+    }
   } catch {
     return { title: 'Product not found' }
   }
